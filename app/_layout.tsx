@@ -1,37 +1,27 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import index from '../app/index';
+import detail from './detail';
+import singUpScreen from './singUpScreen';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+type stackScreens = {
+  index: undefined;
+  detail: undefined;
+  Screen2: undefined;
+  Home: undefined;
+  singUpScreen: undefined;
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+};
+
+const Stack = createNativeStackNavigator<stackScreens>();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="index" component={index} options={{ title: 'Index' }} />
+      <Stack.Screen name="detail" component={detail} options={{ title: 'Detail' }} />
+      <Stack.Screen name="singUpScreen" component={singUpScreen} options={{ title: 'Sign Up' }} />
+
+    </Stack.Navigator>
   );
 }
